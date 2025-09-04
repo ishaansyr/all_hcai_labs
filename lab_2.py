@@ -1,39 +1,64 @@
 import streamlit as st
 from openai import OpenAI
 
-st.title("📄 Lab 2: My Document question answering")
-st.write(
-    "Upload a document below and ask a question about it – GPT will answer! "
-    "To use this app, set your OpenAI API key in `.streamlit/secrets.toml` or in the app’s Secrets on Streamlit Cloud."
-)
+st.title("Lab 2: Document Summariser")
 
-# 1) Read key from secrets
-openai_api_key = st.secrets.get("API_KEY")
-
-# 2) Guardrail if missing
-if not openai_api_key:
-    st.error("OpenAI API key not found in secrets. Add `openai_api_key` to `.streamlit/secrets.toml` or the app’s Secrets.")
+api_key = st.secrets.get("API_KEY")
+if not api_key:
+    st.error("API key not found in secrets. Add `API_KEY` to `.streamlit/secrets.toml`.")
     st.stop()
 
-# 3) Create client once
-client = OpenAI(api_key=openai_api_key)
+client = OpenAI(api_key=api_key)
 
-# 4) Rest of your app logic stays the same
-uploaded_file = st.file_uploader("Upload a document (.txt or .md)", type=("txt", "md"))
-question = st.text_area(
-    "Now ask a question about the document!",
-    placeholder="Can you give me a short summary?",
-    disabled=not uploaded_file,
+# Sidebar controls
+summary_choice = st.sidebar.radio(
+    "Summary Type",
+    [
+        "Summarize the document in 100 words",
+        "Summarize the document in 2 connecting paragraphs",
+        "Summarize the document in 5 bullet points",
+    ],
+    index=0,
 )
 
-if uploaded_file and question:
-    document = uploaded_file.read().decode()
+use_advanced = st.sidebar.checkbox("Use Advanced Model", value=False)
+
+# Default: gpt-4o-mini; if advanced is selected: gpt-4o
+model_name = "gpt-4o" if use_advanced else "gpt-4o-mini"
+
+
+uploaded_file = st.file_uploader("Upload a document (.txt or .md)", type=("txt", "md"))
+
+def build_instruction(choice: str) -> str:
+    if "100 words" in choice:
+        return (
+            "Summarise the document in exactly 100 words as a single paragraph. "
+            "No title or bullets. Use only information from the document."
+        )
+    if "2 connecting paragraphs" in choice:
+        return (
+            "Summarise the document in two connected paragraphs. "
+            "Paragraph 1: core thesis and key evidence. "
+            "Paragraph 2: implications, limitations, or next steps linking back to paragraph 1. "
+            "No headings or bullets. Use only information from the document."
+        )
+    return (
+        "Summarise the document in exactly five bullet points. "
+        "Each point must be 25 words or fewer, factual, and non-overlapping. "
+        "No introduction or conclusion. Use only information from the document."
+    )
+
+if uploaded_file:
+    document = uploaded_file.read().decode("utf-8", errors="ignore")
+    instruction = build_instruction(summary_choice)
     messages = [
-        {"role": "user", "content": f"Here's a document: {document} \n\n---\n\n {question}"}
+        {"role": "system", "content": "You are a careful, concise summariser. Follow the requested format exactly and do not invent facts."},
+        {"role": "user", "content": f"{instruction}\n\n--- DOCUMENT START ---\n{document}\n--- DOCUMENT END ---"},
     ]
     stream = client.chat.completions.create(
-        model="gpt-5-nano",
+        model=model_name,
         messages=messages,
+        temperature=0.3,
         stream=True,
     )
     st.write_stream(stream)
