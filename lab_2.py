@@ -62,3 +62,9 @@ if uploaded_file:
         stream=True,
     )
     st.write_stream(stream)
+
+
+
+    '''
+    4o-mini should be the default model for a task such as this, as the stark increase in the cost isn't worth the marginal improvement in asnwers from 4o to 40-mini
+    '''
