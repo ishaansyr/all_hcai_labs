@@ -8,7 +8,7 @@ st.write(
 )
 
 # 1) Read key from secrets
-openai_api_key = st.secrets.get("openai_api_key")
+openai_api_key = st.secrets.get("API_KEY")
 
 # 2) Guardrail if missing
 if not openai_api_key:
