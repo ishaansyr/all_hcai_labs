@@ -1,6 +1,12 @@
 import streamlit as st
 
-st.title("🎈 My new app")
-st.write(
-    "Let's start building! For help and inspiration, head over to [docs.streamlit.io](https://docs.streamlit.io/)."
-)
+# Define your pages
+lab1 = st.Page("lab_1.py", title="Lab 1", icon="🧪")
+lab2 = st.Page("lab_2.py", title="Lab 2", icon="📄")
+lab3 = st.Page("lab_3.py", title = "Lab 3")
+
+# Build the navigation (set Lab 2 as default)
+pg = st.navigation([lab2, lab1, lab3])
+
+# Run the selected page
+pg.run()
