@@ -3,7 +3,7 @@ from openai import OpenAI
 
 st.title("Lab 2: Document Summariser")
 
-api_key = st.secrets.get("API_KEY")
+api_key = st.secrets.get("OPENAI_API_KEY")
 if not api_key:
     st.error("API key not found in secrets. Add `API_KEY` to `.streamlit/secrets.toml`.")
     st.stop()
