@@ -63,7 +63,7 @@ if user_input:
 
     # Add follow-up question if in info flow
     if st.session_state.info_stage in [1, 2]:
-        follow_up = "Do you want some more information?"
+        follow_up = "DO YOU WANT MORE INFO?"
         st.session_state.messages.append({"role": "assistant", "content": follow_up})
         with st.chat_message("assistant"):
             st.markdown(follow_up)
