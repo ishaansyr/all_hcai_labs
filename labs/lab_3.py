@@ -13,7 +13,7 @@ if "client" not in st.session_state:
     st.session_state.client = OpenAI(api_key=api_key)
 
 # Initialize message history
-if "messages" not in st.session_state:
+if "messages" not in st.sessioån_state:
     st.session_state.messages = [
         {"role": "assistant", "content": "How can I help you?"}
     ]
@@ -30,6 +30,10 @@ user_input = st.chat_input("Type your message here...")
 if user_input:
     # Append user message
     st.session_state.messages.append({"role": "user", "content": user_input})
+
+    # Keep only the last 4 messages (2 user + 2 assistant)
+    st.session_state.messages = st.session_state.messages[-4:]
+
     with st.chat_message("user"):
         st.markdown(user_input)
 
