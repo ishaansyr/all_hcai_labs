@@ -36,10 +36,10 @@ if user_input:
 
     # Handle follow-up info stages
     if st.session_state.info_stage == 1 and user_input.strip().lower() == "yes":
-        prompt = "Please expand with more detail."
+        prompt = "Please expand with more detail. Build on the last answer, do not repeat the same information"
         st.session_state.info_stage = 2
     elif st.session_state.info_stage == 2 and user_input.strip().lower() == "yes":
-        prompt = "Please expand with even more detail."
+        prompt = "Please expand with even more detail. Build on the last 2 answers, do not repeat the same information"
         st.session_state.info_stage = 0
     elif st.session_state.info_stage in [1, 2] and user_input.strip().lower() != "yes":
         prompt = "What can I help you with?"
