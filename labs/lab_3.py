@@ -13,7 +13,7 @@ if "client" not in st.session_state:
     st.session_state.client = OpenAI(api_key=api_key)
 
 # Initialize message history
-if "messages" not in st.sessioån_state:
+if "messages" not in st.session_state:
     st.session_state.messages = [
         {"role": "assistant", "content": "How can I help you?"}
     ]
