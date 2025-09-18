@@ -9,7 +9,7 @@ import chromadb
 import fitz  # PyMuPDF
 
 # ---- Lab 4A ----
-st.title("Lab 4A – ChromaDB with OpenAI Embeddings (Upload PDFs)")
+st.title("Lab 4A - ChromaDB with OpenAI Embeddings")
 
 # Initialize OpenAI client once
 if "openai_client" not in st.session_state:
