@@ -1,2 +1,5 @@
 streamlit
 openai
+PyPDF2
+protobuf == 3.20
+pysqlite-binary
