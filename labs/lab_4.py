@@ -119,8 +119,7 @@ if user_input:
         with st.spinner("Thinking..."):
             response = openai_client.chat.completions.create(
                 model="gpt-5-nano",
-                messages=messages,
-                temperature=0.3,
+                messages=messages
             )
             reply = response.choices[0].message.content
             st.markdown(reply)
